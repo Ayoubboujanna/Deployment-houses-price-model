@@ -1,0 +1,26 @@
+import pickle
+import streamlit as st
+
+model =pickle.load(open("regressor.pkl"))
+
+def main():
+    st.title('houses predictions')
+    OverallQual=st.text_input('OverallQual')
+    Total_Square_Feet=st.text_input('Total_Square_Feet')
+    GrLivArea=st.text_input('GrLivArea')
+    GarageCars=st.text_input('GarageCars')
+    Total_Bath=st.text_input('Total_Bath')
+    GarageArea=st.text_input('GarageArea')
+    TotalBsmtSF=st.text_input('TotalBsmtSF')
+    stFlrSF=st.text_input('stFlrSF')
+    YrBltRmd=st.text_input('YrBltRmd')
+    FullBath=st.text_input('FullBath')
+   
+    if st.button('predict'):
+        makeprediction=model.predict([[OverallQual,Total_Square_Feet,GrLivArea,GarageCars,Total_Bath,GarageArea,TotalBsmtSF,stFlrSF,YrBltRmd,FullBath]])
+        output=round(100*makeprediction[0],2)
+        st.success(('the price of this house is {}'.format(output)))
+
+
+if __name__ == "__main__":
+    main()

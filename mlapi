@@ -1,0 +1,21 @@
+from fastapi import FastAPI
+import uvicorn
+import pickle
+
+app=FastAPI(debug=True)
+
+@app.get('/')
+def home(): 
+    return{'text':'house prediction solution'}
+
+@app.get('/predict')
+def predict (OverallQual:str,Total_Square_Feet:str,GrLivArea:str,GarageCars:str,Total_Bath:str,GarageArea:str,TotalBsmtSF:str,stFlrSF:str,YrBltRmd:str,FullBath:str):
+    model =pickle.load(open("regressor.pkl",'rb'))
+    makeprediction=model.predict([[OverallQual,Total_Square_Feet,GrLivArea,GarageCars,Total_Bath,GarageArea,TotalBsmtSF,stFlrSF,YrBltRmd,FullBath]])
+    output=round(1000*makeprediction[0],2)
+
+    return {'the price of this house is {} $'.format(output)}
+
+
+if __name__== '__main__':
+    uvicorn.run(app)    
